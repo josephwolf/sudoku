@@ -1,8 +1,9 @@
-require './lib/sudoku'
-require 'test/unit'
+require '../lib/sudoku'
+require '../lib/cell'
+require 'minitest/autorun'
 require 'ruby-debug'
 
-class SudokuTest < Test::Unit::TestCase
+class SudokuTest < Minitest::Test
 
   def setup
     @sudoku = Sudoku.new '015003002000100906270068430490002017501040380003905000900081040860070025037204600'

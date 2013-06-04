@@ -1,5 +1,3 @@
-require './lib/cell'
-
 class Sudoku
 
   SIZE = 81
@@ -13,8 +11,6 @@ class Sudoku
 
   def solve!    
     while not solved? do
-      # puts "solved: #{@cells.count(&:solved?)}"
-      # puts self.to_s      
       @cells.each_with_index do |cell, i|
         cell.update!(common_row(i), common_column(i), common_box(i))
       end
@@ -22,7 +18,8 @@ class Sudoku
   end
 
   def common_row(index)
-    from = (index / COLUMN_SIZE).to_i * COLUMN_SIZE    
+    # integer division here
+    from = index - index % COLUMN_SIZE
     @cells.slice(from, COLUMN_SIZE)
   end
 
@@ -36,7 +33,8 @@ class Sudoku
   end
 
   def common_box(index)
-    initial = ((index % COLUMN_SIZE) / BOX_SIZE) * BOX_SIZE + ((index / COLUMN_SIZE) / BOX_SIZE) * COLUMN_SIZE * BOX_SIZE
+    # integer division here, possibly suboptimal    
+    initial = (index % COLUMN_SIZE)  + index/COLUMN_SIZE / BOX_SIZE * COLUMN_SIZE * BOX_SIZE
     Array.new(BOX_SIZE) {
       cells = @cells.slice(initial, BOX_SIZE) 
       initial += COLUMN_SIZE
