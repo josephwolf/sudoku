@@ -13,6 +13,7 @@ class Sudoku
   end
 
   def to_s    
+    # this is arguably stupid
     rows = @cells.each_slice(COLUMN_SIZE).inject([]) do |strings, row|
       strings << row.each_slice(BOX_SIZE).map{|a| a.map(&:to_s).join(" ")}.join(" | ")
     end
