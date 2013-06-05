@@ -9,16 +9,21 @@ class Sudoku
 
   def initialize(args)
     raise "Wrong number of values given, #{SIZE} expected" unless args.length == SIZE
-    @cells = initialized_cells(args)
+    initialize_cells(args)
   end
 
-  def to_s    
+  def to_s
+    @cells.map(&:value).join
+  end
+
+  def to_board
     # this is arguably stupid
     rows = @cells.each_slice(COLUMN_SIZE).inject([]) do |strings, row|
       strings << row.each_slice(BOX_SIZE).map{|a| a.map(&:to_s).join(" ")}.join(" | ")
     end
     row_length = rows.first.length    
-    rows.each_slice(BOX_SIZE).map{|s| s.join("\n")}.join("\n#{'-' * row_length}\n")
+    separator = "\n#{'-' * row_length}\n"
+    rows.each_slice(BOX_SIZE).map{|s| s.join("\n")}.join(separator)
   end
 
   def solved?
@@ -33,9 +38,28 @@ class Sudoku
       looping             = outstanding_before == outstanding
       outstanding_before  = outstanding
     end
+    try_harder unless solved?
   end
 
 private
+
+  def replicate!
+    self.class.new(self.to_s)
+  end
+
+  def steal_solution(source)
+    initialize_cells(source.to_s)        
+  end
+
+  def try_harder
+    blank_cell = @cells.reject(&:solved?).first
+    blank_cell.candidates.each do |candidate|
+      blank_cell.assume(candidate)
+      board = replicate!
+      board.solve!
+      steal_solution(board) and return if board.solved?
+    end
+  end
 
   def try_to_solve!
     @cells.each do |cell|        
@@ -62,7 +86,7 @@ private
     end        
   end
   
-  def initialized_cells(digits)
+  def initialize_cells(digits)
     cells       = digits.split('').map {|v| Cell.new(v) }    
     rows        = rows(cells)
     columns     = columns(cells, rows)
@@ -70,7 +94,7 @@ private
     [columns, rows, boxes].each do |slices|
       slices.each {|group| group.each{|cell| cell.add_slice(group)}}
     end
-    cells    
+    @cells = cells
   end
 
 end

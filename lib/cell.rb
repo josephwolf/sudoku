@@ -23,9 +23,16 @@ class Cell
   end
 
   def solve!
-  	return if solved?
-  	candidates = (1..9).to_set.subtract(neighbours)
-  	@value = candidates.first if candidates.length == 1
+  	return if solved?  	
+  	assume(candidates.first) if candidates.length == 1
+  end
+
+  def assume(value)
+    @value = value
+  end
+
+  def candidates
+    (1..9).to_set.subtract(neighbours)
   end
 
   def neighbours

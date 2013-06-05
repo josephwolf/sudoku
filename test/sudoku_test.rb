@@ -10,10 +10,42 @@ class SudokuTest < Minitest::Test
     @cells = @sudoku.send(:cells)
   end
 
-  def test_we_dont_go_into_infinite_loop
-    sudoku = Sudoku.new('0' * 81)
+  def test_can_solve_really_hard_sudoku   
+    skip
+    input = "800000000003600000070090200050007000000045700000100030001000068008500010090000400"
+    sudoku = Sudoku.new input
     sudoku.solve!
-    refute sudoku.solved?
+    assert sudoku.solved?
+    puts
+    puts sudoku.to_board
+  end
+
+  def test_can_solve_hard_problems        
+    skip
+    input = [ # 295637103
+      "000 200 001",
+      "060 075 000",
+      "057 004 060",
+      "900 000 608",
+      "000 080 000",
+      "005 630 040",
+      "500 003 000",
+      "002 000 930",
+      "708 000 014"
+    ].join.gsub(' ', '')
+    sudoku = Sudoku.new input
+    sudoku.solve!
+    assert sudoku.solved?
+  end
+
+  def test_solve_empty    
+    skip
+    input = '0' * 81
+    sudoku = Sudoku.new(input)
+    sudoku.solve!
+    assert sudoku.solved?
+    puts
+    puts sudoku.to_board
   end
 
   def test_splitting_input_into_cells    
