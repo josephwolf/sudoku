@@ -34,7 +34,7 @@ class Sudoku
 
   def common_box(index)
     # integer division here, possibly suboptimal    
-    initial = (index % COLUMN_SIZE)  + index/COLUMN_SIZE / BOX_SIZE * COLUMN_SIZE * BOX_SIZE
+    initial = (index/(COLUMN_SIZE*BOX_SIZE))*COLUMN_SIZE*BOX_SIZE + index%COLUMN_SIZE
     Array.new(BOX_SIZE) {
       cells = @cells.slice(initial, BOX_SIZE) 
       initial += COLUMN_SIZE
