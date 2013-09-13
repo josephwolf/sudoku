@@ -17,7 +17,7 @@ class Sudoku
   end
 
   def to_board
-    # this is arguably stupid
+    # this is a much more convoluted approach than it should be
     rows = @cells.each_slice(COLUMN_SIZE).inject([]) do |strings, row|
       strings << row.each_slice(BOX_SIZE).map{|a| a.map(&:to_s).join(" ")}.join(" | ")
     end
