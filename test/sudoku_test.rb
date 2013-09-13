@@ -1,5 +1,5 @@
-require '../lib/sudoku'
-require '../lib/cell'
+require_relative '../lib/sudoku'
+require_relative '../lib/cell'
 require 'minitest/autorun'
 require 'ruby-debug'
 
@@ -34,7 +34,7 @@ class SudokuTest < Minitest::Test
       "708 000 014"
     ].join.gsub(' ', '')
     sudoku = Sudoku.new input
-    sudoku.solve!
+    sudoku.solve!    
     assert sudoku.solved?
   end
 
@@ -55,7 +55,7 @@ class SudokuTest < Minitest::Test
 
   def test_boxes_are_generated_correctly
     rows = (0..80).map {|i| Cell.new(i)}.each_slice(9).to_a    
-    boxes = @sudoku.send(:boxes, rows)
+    boxes = @sudoku.send(:boxes, rows) # @sudoku.boxes(rows)
     assert_equal 9, boxes.length    
     boxes.each do |box|
       assert_equal 9, box.length

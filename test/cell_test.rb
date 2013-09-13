@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/cell'
+require_relative '../lib/cell'
 
 class CellTest < Minitest::Test
 
